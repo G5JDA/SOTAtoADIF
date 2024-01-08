@@ -18,7 +18,7 @@ Todo
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on code
+Please read [CONTRIBUTING.md](CONTRIBUTING) for details on code
 of conduct, and the process for submitting pull requests.
 
 ## Versioning
