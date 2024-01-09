@@ -27,8 +27,9 @@ Dict is someting like
 - [ ] Add proper error handling so user feedback is useful
 - [ ] Create Wiki on GitHub for more detailed docs
 - [ ] Make big disclaimer / notice that callsign must = single DXCC 
-(and CQ/ITU zones) otherwise not acceptable for LoTW upload.
+(and CQ/ITU zones but these can be set to NONE if not) otherwise not acceptable for LoTW upload.
   - [ ] maybe also make CLI prompt to agree to this caveat
+  - [ ] technically possible to set DXCC to NONE also but then no point uploading to LoTW surely?
 
 ## Ideas / Thoughts
 
