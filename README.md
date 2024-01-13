@@ -1,8 +1,13 @@
 # SOTAtoADIF v0.1.0
 
-Convert SOTA database CSV logs to ADIF.
+Convert SOTA database CSV logs to ADIF. Including enrichment from SOTA API summit data.
 
 Specifically intended to produce ADIF files that can be easily uploaded to LoTW using TQSL.
+Contrary to what many people seem to believe, you do not need a station location in TQSL for every single summit!
+As long as you have not changed the default TQSL settings, the locator from the ADIF QSO will be used.
+The remaining caveat is your callsign must imply the DXCC entity you operated from.
+
+Designed to work with only default python packages to prevent future dependency issues.
 
 ## Psuedocode
 - [ ] Read activator CSV
@@ -48,13 +53,21 @@ Todo
 
 ### Prerequisites
 
-Todo
+- An internet connection (both for initial download and use - calls are made to the SOTA API)
+- A Python installation on your computer (version 3.10 or greater required, 3.12 used for development)
 
 ### Installing
 
 Todo
 
 ## Contributing
+
+Essential:
+- Develop for no older than Python 3.10, preferably 3.11 or 3.12.
+- Do not require non-standard imports (yes, even if the package can be installed with pip!)
+
+If you'd like to contribute a new feature, be sure to create an issue offering to do so first.
+This will likely save much back and forth when compared to surprise PRs!
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on code
 of conduct, and the process for submitting pull requests.

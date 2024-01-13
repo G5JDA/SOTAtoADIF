@@ -134,9 +134,15 @@ Enhancement suggestions are tracked as [GitHub issues](https://github.com/G5JDA/
 <!-- You might want to create an issue template for enhancement suggestions that can be used as a guide and that defines the structure of the information to be included. If you do so, reference it here in the description. -->
 
 ### Your First Code Contribution
-If you don't know where to begin: start small. Pick an issue you think you can tackle and get going.
+If you don't know where to begin: start small. Pick an issue you think you can tackle and get going. 
+If you'd like to contribute a new feature, be sure to create an issue offering to do so first.
+This will likely save much back and forth when compared to surprise PRs!
 
 Otherwise, any contributions are gladly accepted - hopefully without too much nitpicking or style editing required 😊.
+
+Essential:
+- Develop for no older than Python 3.10, preferably 3.11 or 3.12.
+- Do not require non-standard imports (yes, even if the package can be installed with pip!)
 
 ### Improving The Documentation
 For now the only docs are the README.
@@ -153,7 +159,11 @@ If you have good ideas of what to add, please open an issue and explain what you
 ### Python
 All Python code should follow the general intent of PEP8.
 
-There is one major exception: line length should be limited to 120 characters.
+**There is one major exception: line length should be limited to 120 characters.**
+
+Develop for no older than Python 3.10, preferably 3.11 or 3.12.
+
+Do not require non-standard imports (yes, even if the package can be installed with pip!)
 
 <!-- omit in toc -->
 ## Attribution
