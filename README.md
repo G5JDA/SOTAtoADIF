@@ -24,7 +24,7 @@ Designed to work with only default python packages to prevent future dependency 
 
 Dict is someting like
 ```json
-{"G5JDA/P":  [{"call": "DX1ABC", "band":  "20m",...},...]}
+{"G5JDA/P":  [{"call": "DX1ABC", "band":  "20m",...},...]} 
 ```
 ## TODO
 - [ ] Squash all commits and force push to main
