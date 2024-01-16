@@ -19,3 +19,25 @@ sota_csv.py
 
 Contains functionality needed to make sense of SOTA CSV log files
 """
+
+import csv
+from modules import adif
+
+
+def read_log(filepath):
+    """
+    Reads SOTA CSV log file.
+    Specifically no smart processing of the CSV log should be done in this function.
+    i.e. we can use this for activator, s2s, chaser, ...? logs without issue
+    :param filepath: path to CSV log file
+    :return: list of rows from CSV log file (each row itself a list)
+    """
+    log = []
+
+    # TODO decide if we need any error handling here
+    with open(filepath, newline='', encoding='utf-8') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            log.append(row)
+
+    return log
