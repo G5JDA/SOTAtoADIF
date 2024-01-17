@@ -17,7 +17,7 @@ If not, see <https://www.gnu.org/licenses/>.
 
 SOTAtoADIF
 
-This is a program to convert SOTA log csv files to ADIF format.
+This is a program to convert SOTA log CSV files to ADIF format.
 
 In particular, it is intended to be used as part of a workflow
 to upload SOTA log files to ARRL LoTW using TQSL.
@@ -34,3 +34,17 @@ if __name__ == '__main__':
     # do stuff
     data = sota_api.summit_data_from_ref(input("Input summit ref: "))
     print("Summit locator: " + data.get("locator"))
+
+"""
+Thinking two modes:
+
+Activator (most useful as we can assume locator):
+Take input activator log (and optionally S2S log)
+Output merged adif (use S2S log to supplement activator log)
+
+Chaser (less useful, we can't assume locator):
+Take input chaser log (and optionally S2S log)
+Subtract S2S entries from Chaser log
+output as ADIF
+
+"""

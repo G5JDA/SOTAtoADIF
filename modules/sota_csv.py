@@ -21,6 +21,7 @@ Contains functionality needed to make sense of SOTA CSV log files
 """
 
 import csv
+import warnings
 from modules import adif
 
 
@@ -41,3 +42,31 @@ def read_log(filepath):
             log.append(row)
 
     return log
+
+
+def process_qsos(raw_log):
+    """
+    Process SOTA log rows into meaningful QSO records
+    :param raw_log: list of rows from SOTA CSV log (output of read_log)
+    :return: dictionary of QSO records
+    """
+    qso_dict = {}
+
+    # don't try to process an empty log
+    if raw_log:
+        for record in raw_log:
+            match record[0]:
+                case 'V2':
+                    # the case for normal QSO rows
+
+                case 'Version':
+                    # skip header row present in S2S csv
+                    continue
+                case '':
+                    # skip empty records
+                    continue
+                case _:
+                    # default case means unexpected format
+                    warnings.warn("\nUnrecognized version field in CSV row. This could mean the SOTA CSV format has"
+                                  + "changed or the CSV file imported is not a SOTA CSV. Skipping row: " + record)
+                    continue
