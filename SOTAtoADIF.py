@@ -28,12 +28,22 @@ Please check CONTRIBUTING.md if you'd like to improve / add to what this program
 """
 
 from modules import sota_api
+from modules import sota_csv
 
 
 if __name__ == '__main__':
     # do stuff
-    data = sota_api.summit_data_from_ref(input("Input summit ref: "))
-    print("Summit locator: " + data.get("locator"))
+    #data = sota_api.summit_data_from_ref(input("Input summit ref: "))
+    #print("Summit locator: " + data.get("locator"))
+
+    log = sota_csv.read_log(input("Path to log csv: "))
+
+    qsos = sota_csv.process_qsos(log)
+
+    print(qsos.keys())
+    print('\n\n')
+    print(qsos)
+
 
 """
 Thinking two modes:

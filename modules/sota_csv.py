@@ -17,12 +17,11 @@ If not, see <https://www.gnu.org/licenses/>.
 
 sota_csv.py
 
-Contains functionality needed to make sense of SOTA CSV log files
+Contains functionality needed to make sense of SOTA CSV log files, process them into python dictionaries
 """
 
 import csv
 import warnings
-from modules import adif
 
 
 def read_log(filepath):
@@ -46,7 +45,8 @@ def read_log(filepath):
 
 def process_qsos(raw_log):
     """
-    Process SOTA log rows into meaningful QSO records
+    Process SOTA log rows into meaningful QSO records.
+    Here we are not aligning the format to ADIF, just reorganising into a structure we prefer.
     :param raw_log: list of rows from SOTA CSV log (output of read_log)
     :return: dictionary of QSO records
     """
@@ -57,16 +57,39 @@ def process_qsos(raw_log):
         for record in raw_log:
             match record[0]:
                 case 'V2':
-                    # the case for normal QSO rows
+                    # TODO shall we just lob all this in a try - except and warn for bad records?
+                    # the case for normal QSO rows - note some fields may be empty strings ''
+                    qso = {'summit': record[2],
+                           'date': record[3],
+                           'time': record[4],
+                           'frequency': record[5],
+                           'mode': record[6],
+                           'callsign': record[7],  # this is the callsign of the worked station
+                           'other_summit': record[8],  # this is summit of the worked station for s2s/chaser logs
+                           'comment': record[9]}
+
+                    # the outer keys in the qso_dict are callsign used by log owner
+                    if record[1] in qso_dict.keys():
+                        # already processed qsos for this callsign, append
+                        qso_dict[record[1]].append(qso)
+                    else:
+                        # first qso for this callsign, init
+                        qso_dict[record[1]] = [qso]
+
+                    continue
 
                 case 'Version':
                     # skip header row present in S2S csv
                     continue
+
                 case '':
                     # skip empty records
                     continue
+
                 case _:
                     # default case means unexpected format
                     warnings.warn("\nUnrecognized version field in CSV row. This could mean the SOTA CSV format has"
                                   + "changed or the CSV file imported is not a SOTA CSV. Skipping row: " + record)
                     continue
+
+    return qso_dict
