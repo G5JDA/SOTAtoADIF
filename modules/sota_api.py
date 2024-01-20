@@ -47,11 +47,13 @@ def summit_data_from_ref(summit_ref):
             case 200:
                 # the good case, we expect api data to be present, decode the json
                 summit_data = json.loads(response.read().decode(response.info().get_param('charset') or 'utf-8'))
+
             case 204:
                 # most likely the summit ref was not found / is invalid
                 warnings.warn("\nSOTA API returned status code: " + str(status_code) + ". This means summit reference "
                               + "was not found or is bad. Summit ref: " + summit_ref +
                               ". No enrichment for this summit!")
+
             case _:
                 # some other error with the lookup, unknown
                 warnings.warn("\nSOTA API returned status code: " + str(status_code) + ". Unknown error. Summit ref: "
@@ -65,10 +67,12 @@ def summit_data_from_ref(summit_ref):
                 warnings.warn("\nSOTA API returned status code: " + str(e.code) +
                               ". Either summit ref is malformed or API has changed. Summit ref: " + summit_ref +
                               ". No enrichment for this summit!")
+
             case code if code in range(500, 599):
                 # some sort of server error
                 warnings.warn("\nSOTA API returned status code: " + str(e.code) + ". SOTA API may have changed " +
                               "or is down. Summit ref: " + summit_ref + ". No enrichment for this summit!")
+
             case _:
                 # some other error with the lookup, unknown
                 warnings.warn("\nSOTA API returned status code: " + str(e.code) + ". Unknown error. Summit ref: "
