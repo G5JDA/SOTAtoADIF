@@ -34,7 +34,7 @@ def read_log(filepath):
     """
     log = []
 
-    # TODO decide if we need any error handling here
+    # no try-except here: if this doesn't 'just work' we have big problems so dying is probably best
     with open(filepath, newline='', encoding='utf-8') as f:
         reader = csv.reader(f)
         for row in reader:
@@ -57,24 +57,28 @@ def process_qsos(raw_log):
         for record in raw_log:
             match record[0]:
                 case 'V2':
-                    # TODO shall we just lob all this in a try - except and warn for bad records?
                     # the case for normal QSO rows - note some fields may be empty strings ''
-                    qso = {'summit': record[2],
-                           'date': record[3],
-                           'time': record[4],
-                           'frequency': record[5],
-                           'mode': record[6],
-                           'callsign': record[7],  # this is the callsign of the worked station
-                           'other_summit': record[8],  # this is summit of the worked station for s2s/chaser logs
-                           'comment': record[9]}
+                    try:
+                        qso = {'summit': record[2],
+                               'date': record[3],
+                               'time': record[4],
+                               'frequency': record[5],
+                               'mode': record[6],
+                               'callsign': record[7],  # this is the callsign of the worked station
+                               'other_summit': record[8],  # this is summit of the worked station for s2s/chaser logs
+                               'comment': record[9]}
 
-                    # the outer keys in the qso_dict are callsign used by log owner
-                    if record[1] in qso_dict.keys():
-                        # already processed qsos for this callsign, append
-                        qso_dict[record[1]].append(qso)
-                    else:
-                        # first qso for this callsign, init
-                        qso_dict[record[1]] = [qso]
+                        # the outer keys in the qso_dict are callsign used by log owner
+                        if record[1] in qso_dict.keys():
+                            # already processed qsos for this callsign, append
+                            qso_dict[record[1]].append(qso)
+                        else:
+                            # first qso for this callsign, init
+                            qso_dict[record[1]] = [qso]
+
+                    except Exception as e:
+                        warnings.warn("\nUnknown error attempting to process log record as QSO. Record skipped: "
+                                      + record + "\nError info: " + str(e))
 
                     continue
 
