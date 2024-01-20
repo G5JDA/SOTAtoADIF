@@ -10,11 +10,13 @@ The remaining caveat is your callsign must imply the DXCC entity you operated fr
 Designed to work with only default python packages to prevent future dependency issues.
 
 ## Psuedocode
-- [ ] Read activator CSV
-  - [ ] For each line, add QSO to dict (first key is station callsign)
-- [ ] For each QSO in array
-  - [ ] look up sotaref to get locator
-  - [ ] convert MHz to band (switch?)
+- [x] Read activator CSV
+  - [x] For each line, add QSO to dict (first key is station callsign)
+- [ ] S2S enrichment would happen here
+- [ ] For each QSO in dict
+  - [ ] look up sotaref to get locator (keep record of looked up refs in this run to reduce API queries)
+  - [ ] convert MHz to band
+  - [ ] convert mode to adif mode (and submode if relevant)
 - [ ] For each station callsign in dict
   - [ ] Generate ADIF header string, append to ADIF string
   - [ ] For each QSO in array
@@ -22,10 +24,6 @@ Designed to work with only default python packages to prevent future dependency 
   - [ ] Generate ADIF footer (if such a thing), append to ADIF string
   - [ ] Write ADIF file for station callsign
 
-Dict is someting like
-```json
-{"G5JDA/P":  [{"call": "DX1ABC", "band":  "20m",...},...]} 
-```
 ## TODO
 - [ ] Squash all commits and force push to main
 - [ ] Write basic how to use docs into README
