@@ -26,6 +26,7 @@ See README.md or https://github.com/G5JDA/SOTAtoADIF or https://g5jda.uk
 
 Please check CONTRIBUTING.md if you'd like to improve / add to what this program can do.
 """
+import time
 
 from modules import sota_api
 from modules import sota_csv
@@ -35,14 +36,25 @@ if __name__ == '__main__':
     # do stuff
     #data = sota_api.summit_data_from_ref(input("Input summit ref: "))
     #print("Summit locator: " + data.get("locator"))
+    file = input("Path to log csv: ")
 
-    log = sota_csv.read_log(input("Path to log csv: "))
-
-    qsos = sota_csv.process_qsos(log)
-
+    t = time.time()
+    log = sota_csv.read_log(file)
+    t1 = time.time() - t
+    t = time.time()
+    qsos_r = sota_csv.process_qsos(log)
+    t2 = time.time() - t
+    t = time.time()
+    qsos = sota_csv.enrich_qsos(qsos_r)
+    t3 = time.time() - t
+    t = time.time()
     print(qsos.keys())
     print('\n\n')
     print(qsos)
+    print('\n\n')
+    print(t1)
+    print(t2)
+    print(t3)
 
 
 """

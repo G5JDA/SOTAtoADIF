@@ -22,6 +22,7 @@ Contains functionality needed to make sense of SOTA CSV log files, process them 
 
 import csv
 import warnings
+from modules import sota_api
 
 
 def read_log(filepath):
@@ -50,7 +51,7 @@ def process_qsos(raw_log):
     :param raw_log: list of rows from SOTA CSV log (output of read_log)
     :return: dictionary of QSO records
     """
-    qso_dict = {}
+    qsos_dict = {}
 
     # don't try to process an empty log
     if raw_log:
@@ -68,13 +69,13 @@ def process_qsos(raw_log):
                                'other_summit': record[8],  # this is summit of the worked station for s2s/chaser logs
                                'comment': record[9]}
 
-                        # the outer keys in the qso_dict are callsign used by log owner
-                        if record[1] in qso_dict.keys():
+                        # the outer keys in the qsos_dict are callsign used by log owner
+                        if record[1] in qsos_dict.keys():
                             # already processed qsos for this callsign, append
-                            qso_dict[record[1]].append(qso)
+                            qsos_dict[record[1]].append(qso)
                         else:
                             # first qso for this callsign, init
-                            qso_dict[record[1]] = [qso]
+                            qsos_dict[record[1]] = [qso]
 
                     except Exception as e:
                         warnings.warn("\nUnknown error attempting to process log record as QSO. Record skipped: "
@@ -96,4 +97,44 @@ def process_qsos(raw_log):
                                   + "changed or the CSV file imported is not a SOTA CSV. Skipping row: " + record)
                     continue
 
-    return qso_dict
+    return qsos_dict
+
+
+def enrich_qsos(qsos_dict):
+    """
+    Enriches QSOs in the QSO dictionary with locators of 'summit' / 'other_summit' (as applicable).
+    Any merging or subtracting of QSOs should occur before enriching to reduce unnecessary API calls.
+    :param qsos_dict: Dictionary of QSOs in the format returned by process_qsos()
+    :return: qsos_dict enriched with locators where summit refs are successfully looked up in api
+    """
+    checked_summits_data = {}  # caches all summit data from API (so that each summit ref only requires one API call)
+    api_count = 0  # to confirm number of API calls made
+
+    # check input dict is not empty
+    if qsos_dict:
+        # nested for loops to iterate over every qso
+        for callsign in qsos_dict.keys():
+            for qso in qsos_dict[callsign]:
+                # loop to reuse same code for 'summit' and 'other_summit' lookups
+                for key in ['summit', 'other_summit']:
+                    summit_type_key = key  # the key of qso dict ('summit' or 'other_summit')
+                    summit_ref = qso[summit_type_key]  # local var for summit ref to improve readability
+
+                    # check summit_ref is not blank string
+                    if summit_ref:
+                        # only make the API call if we do not have a cached copy of the data
+                        if summit_ref not in checked_summits_data.keys():
+                            summit_data = sota_api.summit_data_from_ref(summit_ref)
+                            checked_summits_data[summit_ref] = summit_data  # cache the summit data
+                            api_count += 1
+
+                        locator_key = summit_type_key + '_locator'  # either 'summit_locator' or 'other_summit_locator'
+                        summit_locator = checked_summits_data[summit_ref]['locator']  # get summit locator from cache
+
+                        qso[locator_key] = summit_locator  # we can get away with this since dicts are objects in py
+
+    # TODO quiet mode doesn't print? (or only print in verbose mode???)
+    print("Number of unique summits found: " + str(len(checked_summits_data.keys())))
+    print("Number of API calls (should equal number of unique summits): " + str(api_count))
+
+    return qsos_dict
