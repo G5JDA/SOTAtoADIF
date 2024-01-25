@@ -13,14 +13,14 @@ Designed to work with only default python packages to prevent future dependency 
 - [x] Read activator CSV
   - [x] For each line, add QSO to dict (first key is station callsign)
 - [ ] S2S enrichment would happen here
-- [ ] For each QSO in dict
-  - [ ] look up sotaref to get locator (keep record of looked up refs in this run to reduce API queries)
-  - [ ] convert MHz to band
-  - [ ] convert mode to adif mode (and submode if relevant)
+- [x] For each QSO in dict
+  - [x] look up sotaref to get locator (keep record of looked up refs in this run to reduce API queries)
 - [ ] For each station callsign in dict
   - [ ] Generate ADIF header string, append to ADIF string
   - [ ] For each QSO in array
     - [ ] Generate QSO ADIF string, append to ADIF string
+    - [ ] convert MHz to band
+    - [ ] convert mode to adif mode (and submode if relevant)
   - [ ] Generate ADIF footer (if such a thing), append to ADIF string
   - [ ] Write ADIF file for station callsign
 
@@ -44,6 +44,10 @@ Designed to work with only default python packages to prevent future dependency 
   Not an issue for LoTW as long as the station location has blank locator field (docs suggest this is possible, and how 
   LoTW copes with airborne contacts). I guess the user could use their home QTH if they are sure all contacts are from 
   there. Not much gain over ON6ZQ but I guess worth adding for completeness in version > 1.
+- [ ] Should we allow non-default included modules just so we can use urllib3?
+  - This may significantly speed up the API lookups as built-in urllib 
+  reestablishes a connection for each request (including DNS lookup!!!)
+  SOTA API is https only so overhead is quite high.
 
 ## Getting Started / How to Use
 
