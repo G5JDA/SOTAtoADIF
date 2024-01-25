@@ -59,6 +59,7 @@ def process_qsos(raw_log):
             match record[0]:
                 case 'V2':
                     # the case for normal QSO rows - note some fields may be empty strings ''
+                    # note that columns are consistent across activator, s2s, chaser logs (thankfully!)
                     try:
                         qso = {'summit': record[2],
                                'date': record[3],

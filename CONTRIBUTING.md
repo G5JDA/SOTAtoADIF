@@ -21,9 +21,8 @@ All types of contributions are encouraged and valued. See the [Table of Contents
 - [Suggesting Enhancements](#suggesting-enhancements)
 - [Your First Code Contribution](#your-first-code-contribution)
 - [Improving The Documentation](#improving-the-documentation)
-- [Styleguides](#styleguides)
+- [Style guides](#style-guides)
 - [Commit Messages](#commit-messages)
-- [Join The Project Team](#join-the-project-team)
 
 
 ## Code of Conduct
@@ -78,7 +77,7 @@ A good bug report shouldn't leave others needing to chase you up for more inform
 - Make sure that you are using the latest version.
 - Determine if your bug is really a bug and not an error on your side e.g. using incompatible environment components/versions (Make sure that you have read the [documentation](https://github.com/G5JDA/SOTAtoADIF). If you are looking for support, you might want to check [this section](#i-have-a-question)).
 - To see if other users have experienced (and potentially already solved) the same issue you are having, check if there is not already a bug report existing for your bug or error in the [bug tracker](https://github.com/G5JDA/SOTAtoADIFissues?q=label%3Abug).
-- Also make sure to search the internet (including Stack Overflow) to see if users outside of the GitHub community have discussed the issue.
+- Also make sure to search the internet (including Stack Overflow) to see if users outside the GitHub community have discussed the issue.
 - Collect information about the bug:
 - Stack trace (Traceback)
 - OS, Platform and Version (Windows, Linux, macOS, x86, ARM)
@@ -89,7 +88,7 @@ A good bug report shouldn't leave others needing to chase you up for more inform
 <!-- omit in toc -->
 #### How Do I Submit a Good Bug Report?
 
-> You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Instead sensitive bugs must be sent by email to SOTAtoADIF (at) g5jda.uk .
+> You must never report security related issues, vulnerabilities or bugs including sensitive information to the issue tracker, or elsewhere in public. Instead, sensitive bugs must be sent by email to SOTAtoADIF (at) g5jda.uk .
 <!-- You may add a PGP key to allow the messages to be sent encrypted as well. -->
 
 We use GitHub issues to track bugs and errors. If you run into an issue with the project:
@@ -149,7 +148,7 @@ For now the only docs are the README.
 If you have good ideas of what to add, please open an issue and explain what you'd like to do
 (or just do it and submit a PR).
 
-## Styleguides
+## Style guides
 ### Commit Messages
 - Be concise, describe the changes.
 - Use atomic commits:
