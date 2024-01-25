@@ -24,12 +24,13 @@ e.g. finding summit data from reference
 import json
 import urllib.error
 import urllib.request
+import urllib3
 import warnings
 
 api_url_base = "https://api2.sota.org.uk/api/"
 
 
-def summit_data_from_ref(summit_ref):
+def summit_data_from_ref(summit_ref, http):
     """
     Retrieves summit data from SOTA API
     :param summit_ref: summit reference string, e.g. G/CE-001
@@ -38,15 +39,21 @@ def summit_data_from_ref(summit_ref):
     # return variable - if we don't successfully get the summit data, we return None
     summit_data = None
 
+    # Creating a PoolManager instance for sending requests.
+    # http = urllib3.PoolManager()
+
     try:
         api_url = api_url_base + "summits/" + summit_ref
-        response = urllib.request.urlopen(api_url)
-        status_code = response.getcode()
+        # response = urllib.request.urlopen(api_url)
+        response = http.request("GET", api_url)
+        # status_code = response.getcode()
+        status_code = response.status
 
         match status_code:
             case 200:
                 # the good case, we expect api data to be present, decode the json
-                summit_data = json.loads(response.read().decode(response.info().get_param('charset') or 'utf-8'))
+                # summit_data = json.loads(response.read().decode(response.info().get_param('charset') or 'utf-8'))
+                summit_data = response.json()
 
             case 204:
                 # most likely the summit ref was not found / is invalid

@@ -22,6 +22,9 @@ Contains functionality needed to make sense of SOTA CSV log files, process them 
 
 import csv
 import warnings
+
+import urllib3
+
 from modules import sota_api
 
 
@@ -113,6 +116,8 @@ def enrich_qsos(qsos_dict):
 
     # check input dict is not empty
     if qsos_dict:
+        http = urllib3.PoolManager()
+
         # nested for loops to iterate over every qso
         for callsign in qsos_dict.keys():
             for qso in qsos_dict[callsign]:
@@ -125,7 +130,7 @@ def enrich_qsos(qsos_dict):
                     if summit_ref:
                         # only make the API call if we do not have a cached copy of the data
                         if summit_ref not in checked_summits_data.keys():
-                            summit_data = sota_api.summit_data_from_ref(summit_ref)
+                            summit_data = sota_api.summit_data_from_ref(summit_ref, http)
                             checked_summits_data[summit_ref] = summit_data  # cache the summit data
                             api_count += 1
 

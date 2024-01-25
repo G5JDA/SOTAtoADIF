@@ -53,10 +53,7 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    # do stuff
-    # data = sota_api.summit_data_from_ref(input("Input summit ref: "))
-    # print("Summit locator: " + data.get("locator"))
-    file = input("Path to log csv: ")
+    file = args.log_path
 
     t = time.time()
     log = sota_csv.read_log(file)
