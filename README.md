@@ -33,7 +33,8 @@ Designed to work with only default python packages to prevent future dependency 
 (and CQ/ITU zones but these can be set to NONE if not) otherwise not acceptable for LoTW upload.
   - [ ] maybe also make CLI prompt to agree to this caveat
   - [ ] technically possible to set DXCC to NONE also but then no point uploading to LoTW surely?
-
+- [ ] Change docs inc contributing.md to allow urllib3 import
+- [ ] venv creation script + pip install requirements.txt (python>=3.10, urllib3>=2)
 ## Ideas / Thoughts
 
 - [ ] Optional import of S2S CSV, then do some kind of join if all other fields of QSO match, add DX SOTA ref

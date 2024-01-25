@@ -116,7 +116,7 @@ def enrich_qsos(qsos_dict):
 
     # check input dict is not empty
     if qsos_dict:
-        http = urllib3.PoolManager()
+        http = urllib3.PoolManager()  # TODO sensible name and comment here
 
         # nested for loops to iterate over every qso
         for callsign in qsos_dict.keys():
@@ -130,7 +130,7 @@ def enrich_qsos(qsos_dict):
                     if summit_ref:
                         # only make the API call if we do not have a cached copy of the data
                         if summit_ref not in checked_summits_data.keys():
-                            summit_data = sota_api.summit_data_from_ref(summit_ref, http)
+                            summit_data = sota_api.summit_data_from_ref(summit_ref, http)  # TODO mention http
                             checked_summits_data[summit_ref] = summit_data  # cache the summit data
                             api_count += 1
 

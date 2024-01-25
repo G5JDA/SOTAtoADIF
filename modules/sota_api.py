@@ -33,19 +33,17 @@ api_url_base = "https://api2.sota.org.uk/api/"
 def summit_data_from_ref(summit_ref, http):
     """
     Retrieves summit data from SOTA API
+    :param http: urllib3.PoolManager to use for connections
     :param summit_ref: summit reference string, e.g. G/CE-001
     :return: summit data as a dictionary if lookup succeeds, otherwise None
     """
     # return variable - if we don't successfully get the summit data, we return None
     summit_data = None
 
-    # Creating a PoolManager instance for sending requests.
-    # http = urllib3.PoolManager()
-
     try:
         api_url = api_url_base + "summits/" + summit_ref
         # response = urllib.request.urlopen(api_url)
-        response = http.request("GET", api_url)
+        response = http.request("GET", api_url)  # TODO get rid of urllib code
         # status_code = response.getcode()
         status_code = response.status
 
@@ -67,6 +65,7 @@ def summit_data_from_ref(summit_ref, http):
                               + summit_ref + ". No enrichment for this summit!")
 
     # catch HTTP errors
+    # TODO update these to urllib3 exceptions
     except urllib.error.HTTPError as e:
         match e.code:
             case 404:
