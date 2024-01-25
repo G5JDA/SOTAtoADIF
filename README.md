@@ -48,6 +48,7 @@ Designed to work with only default python packages to prevent future dependency 
   - This may significantly speed up the API lookups as built-in urllib 
   reestablishes a connection for each request (including DNS lookup!!!)
   SOTA API is https only so overhead is quite high.
+- [ ] We could use pyinstaller to create a less complicated way to use this program for users not familiar with python
 
 ## Getting Started / How to Use
 
