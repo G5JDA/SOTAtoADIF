@@ -45,6 +45,8 @@ Designed for `Python >= 3.10, urllib3 >= 2`.
   LoTW copes with airborne contacts). I guess the user could use their home QTH if they are sure all contacts are from 
   there. Not much gain over ON6ZQ, but I guess worth adding for completeness in version > 1.
 - [ ] We could use pyinstaller to create a less complicated way to use this program for users not familiar with python
+  - maybe this is the best option for Windows?
+  - not needed for linux, latest (LTS) releases of major distros are already at least python3.10
 
 ## Getting Started / How to Use
 
@@ -62,7 +64,7 @@ Todo
 ## Contributing
 
 Essential:
-- Develop for no older than Python 3.10, preferably 3.11 or 3.12.
+- Develop for Python 3.10.
 - Avoid non-standard imports unless you have an undeniable reason:
   - Yes, even if the package can be installed with pip!
   - This is to save ourselves from future dependency chaos.

@@ -140,7 +140,7 @@ This will likely save much back and forth when compared to surprise PRs!
 Otherwise, any contributions are gladly accepted - hopefully without too much nitpicking or style editing required 😊.
 
 Essential:
-- Develop for no older than Python 3.10, preferably 3.11 or 3.12.
+- Develop for Python 3.10.
 - Avoid non-standard imports unless you have an undeniable reason:
   - Yes, even if the package can be installed with pip!
   - This is to save ourselves from future dependency chaos.
@@ -162,9 +162,6 @@ If you have good ideas of what to add, please open an issue and explain what you
 All Python code should follow the general intent of PEP8.
 
 **There is one major exception: line length should be limited to 120 characters.**
-
-Develop for no older than Python 3.10, preferably 3.11 or 3.12.
-
 
 <!-- omit in toc -->
 ## Attribution
