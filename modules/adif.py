@@ -22,3 +22,17 @@ Handles production of ADIF format and has related helpers (e.g. MHz to ADIF band
 
 from SOTAtoADIF import __version__
 # TODO use this to include version number in ADIF header
+
+# TODO mode string to ADIF mode (and sub-mode)
+
+# TODO MHz string to ADIF band
+
+# TODO ADIF header from callsign
+
+# TODO ADIF footer
+
+# TODO ADIF QSO line from QSO dict, station callsign
+
+# TODO write ADIF string to file
+
+# TODO log dict to ADIF files (this function to be called from SOTAtoADIF.py)
