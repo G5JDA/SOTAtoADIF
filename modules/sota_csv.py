@@ -22,9 +22,6 @@ Contains functionality needed to make sense of SOTA CSV log files, process them 
 
 import csv
 import warnings
-
-import urllib3
-
 from modules import sota_api
 
 
@@ -37,12 +34,16 @@ def read_log(filepath):
     :return: list of rows from CSV log file (each row itself a list)
     """
     log = []
+    row_count = 0
 
     # no try-except here: if this doesn't 'just work' we have big problems so dying is probably best
     with open(filepath, newline='', encoding='utf-8') as f:
         reader = csv.reader(f)
         for row in reader:
             log.append(row)
+            row_count += 1
+
+    print("Read {} rows from {}".format(row_count, filepath))  # TODO quiet mode
 
     return log
 
@@ -62,7 +63,7 @@ def process_qsos(raw_log):
             match record[0]:
                 case 'V2':
                     # the case for normal QSO rows - note some fields may be empty strings ''
-                    # note that columns are consistent across activator, s2s, chaser logs (thankfully!)
+                    # note also that columns are consistent across activator, s2s, chaser logs (thankfully!)
                     try:
                         qso = {'summit': record[2],
                                'date': record[3],
@@ -101,6 +102,11 @@ def process_qsos(raw_log):
                                   + "changed or the CSV file imported is not a SOTA CSV. Skipping row: " + record)
                     continue
 
+    # TODO quiet mode
+    if qsos_dict:
+        for key in qsos_dict.keys():
+            print('Found {} QSOs with callsign {}.'.format(len(qsos_dict[key]), key))
+
     return qsos_dict
 
 
@@ -116,8 +122,6 @@ def enrich_qsos(qsos_dict):
 
     # check input dict is not empty
     if qsos_dict:
-        http = urllib3.PoolManager()  # TODO sensible name and comment here
-
         # nested for loops to iterate over every qso
         for callsign in qsos_dict.keys():
             for qso in qsos_dict[callsign]:
@@ -130,7 +134,7 @@ def enrich_qsos(qsos_dict):
                     if summit_ref:
                         # only make the API call if we do not have a cached copy of the data
                         if summit_ref not in checked_summits_data.keys():
-                            summit_data = sota_api.summit_data_from_ref(summit_ref, http)  # TODO mention http
+                            summit_data = sota_api.summit_data_from_ref(summit_ref)
                             checked_summits_data[summit_ref] = summit_data  # cache the summit data
                             api_count += 1
 
@@ -139,8 +143,8 @@ def enrich_qsos(qsos_dict):
 
                         qso[locator_key] = summit_locator  # we can get away with this since dicts are objects in py
 
-    # TODO quiet mode doesn't print? (or only print in verbose mode???)
+    # TODO quiet mode (is there some proper way to do info prints??)
     print("Number of unique summits found: " + str(len(checked_summits_data.keys())))
-    print("Number of API calls (should equal number of unique summits): " + str(api_count))
+    print("Number of API calls: " + str(api_count))  # should equal number of unique summits
 
     return qsos_dict

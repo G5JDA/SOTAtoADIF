@@ -21,19 +21,20 @@ Contains all functionality related to the SOTA API.
 e.g. finding summit data from reference
 """
 
-import json
-import urllib.error
-import urllib.request
+import urllib.error  # TODO remove this once try except updated below
 import urllib3
 import warnings
+from SOTAtoADIF import __version__
 
+# things we need for API calls
 api_url_base = "https://api2.sota.org.uk/api/"
+user_agent = "Python SOTAtoADIF v{} by G5JDA".format(__version__)
+header = {'User-Agent': user_agent}
 
 
-def summit_data_from_ref(summit_ref, http):
+def summit_data_from_ref(summit_ref):
     """
     Retrieves summit data from SOTA API
-    :param http: urllib3.PoolManager to use for connections
     :param summit_ref: summit reference string, e.g. G/CE-001
     :return: summit data as a dictionary if lookup succeeds, otherwise None
     """
@@ -42,15 +43,12 @@ def summit_data_from_ref(summit_ref, http):
 
     try:
         api_url = api_url_base + "summits/" + summit_ref
-        # response = urllib.request.urlopen(api_url)
-        response = http.request("GET", api_url)  # TODO get rid of urllib code
-        # status_code = response.getcode()
+        response = urllib3.request("GET", api_url, retries=3, headers=header)  # using urllib3 global PoolManager
         status_code = response.status
 
         match status_code:
             case 200:
                 # the good case, we expect api data to be present, decode the json
-                # summit_data = json.loads(response.read().decode(response.info().get_param('charset') or 'utf-8'))
                 summit_data = response.json()
 
             case 204:
