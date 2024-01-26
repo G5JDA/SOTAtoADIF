@@ -79,3 +79,51 @@ def summit_data_from_ref(summit_ref):
                       + "Error info: " + str(e))
 
     return summit_data
+
+
+def enrich_qsos(qsos_dict):
+    """
+    Enriches QSOs in the QSO dictionary with locators of 'summit' / 'other_summit' (as applicable).
+    Any merging or subtracting of QSOs should occur before enriching to reduce unnecessary API calls.
+    :param qsos_dict: Dictionary of QSOs in the format returned by process_qsos()
+    :return: qsos_dict enriched with locators where summit refs are successfully looked up in api
+    """
+    checked_summits_data = {}  # caches all summit data from API (so that each summit ref only requires one API call)
+    api_count = 0  # to confirm number of API calls made
+
+    # check input dict is not empty
+    if qsos_dict:
+        # nested for loops to iterate over every qso
+        for callsign in qsos_dict.keys():
+            for qso in qsos_dict[callsign]:
+                # loop to reuse same code for 'summit' and 'other_summit' lookups
+                for key in ['summit', 'other_summit']:
+                    summit_type_key = key  # the key of qso dict ('summit' or 'other_summit')
+                    summit_ref = qso[summit_type_key]  # local var for summit ref to improve readability
+
+                    # check summit_ref is not blank string
+                    if summit_ref:
+                        # only make the API call if we do not have a cached copy of the data
+                        if summit_ref not in checked_summits_data.keys():
+                            summit_data = summit_data_from_ref(summit_ref)
+                            checked_summits_data[summit_ref] = summit_data  # cache the summit data
+                            api_count += 1
+
+                        # make sure the summit data is not empty (e.g. after API call failures)
+                        summit_data = checked_summits_data[summit_ref]
+                        if summit_data:
+                            # get summit locator from cache
+                            summit_locator = checked_summits_data[summit_ref].get('locator', '')
+
+                            # make sure summit locator is not empty
+                            if summit_locator:
+                                # either 'summit_locator' or 'other_summit_locator'
+                                locator_key = summit_type_key + '_locator'
+                                # we can get away with this since dicts are objects in python
+                                qso[locator_key] = summit_locator
+
+    # TODO quiet mode (is there some proper way to do info prints??)
+    print("Number of unique summits found: " + str(len(checked_summits_data.keys())))
+    print("Number of API calls: " + str(api_count))  # should equal number of unique summits
+
+    return qsos_dict

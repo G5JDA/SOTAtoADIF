@@ -32,8 +32,8 @@ __author__ = 'Jack G5JDA'
 
 import time
 import argparse
-
 from modules import sota_csv
+from modules import sota_api
 
 
 if __name__ == '__main__':
@@ -63,10 +63,11 @@ if __name__ == '__main__':
         print('options -q -c -s not yet implemented')
         exit(1)
 
-    file = args.log_path
-    log = sota_csv.read_log(file)
-    qsos_r = sota_csv.process_qsos(log)
-    qsos = sota_csv.enrich_qsos(qsos_r)
+    # start of main program flow...
+    main_log_path = args.log_path  # get the path to main log file CSV (activator/chaser)
+    main_log_rows = sota_csv.read_log(main_log_path)  # read CSV rows into list
+    main_log_dict = sota_csv.process_qsos(main_log_rows)  # process rows into QSO dict
+    main_log_dict = sota_api.enrich_qsos(main_log_dict)  # enrich QSOs with API data
 
     duration = round(time.time() - time_start, 2)
     print('Completed in {} seconds.'.format(duration))  # TODO quiet mode
