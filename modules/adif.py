@@ -32,6 +32,7 @@ from SOTAtoADIF import __version__
 # TODO ADIF footer
 
 # TODO ADIF QSO line from QSO dict, station callsign
+# TODO include warning if not chaser mode and my locator is missing
 
 # TODO write ADIF string to file
 
