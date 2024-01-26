@@ -7,7 +7,7 @@ Contrary to what many people seem to believe, you do not need a station location
 As long as you have not changed the default TQSL settings, the locator from the ADIF QSO will be used.
 The remaining caveat is your callsign must imply the DXCC entity you operated from.
 
-Designed to work with only default python packages to prevent future dependency issues.
+Designed for `Python >= 3.10, urllib3 >= 2`.
 
 ## Pseudocode
 - [x] Read activator CSV
@@ -33,7 +33,6 @@ Designed to work with only default python packages to prevent future dependency 
 (and CQ/ITU zones but these can be set to NONE if not) otherwise not acceptable for LoTW upload.
   - [ ] maybe also make CLI prompt to agree to this caveat
   - [ ] technically possible to set DXCC to NONE also but then no point uploading to LoTW surely?
-- [ ] Change docs inc contributing.md to allow urllib3 import
 - [ ] venv creation script + pip install requirements.txt (python>=3.10, urllib3>=2)
 ## Ideas / Thoughts
 
@@ -64,9 +63,14 @@ Todo
 
 Essential:
 - Develop for no older than Python 3.10, preferably 3.11 or 3.12.
-- Do not require non-standard imports (yes, even if the package can be installed with pip!)
+- Avoid non-standard imports unless you have an undeniable reason:
+  - Yes, even if the package can be installed with pip!
+  - This is to save ourselves from future dependency chaos.
+  - `urllib3` is the only exception so far due to the massive time saving it produces.
+- Obey the style guide in [CONTRIBUTING.md](CONTRIBUTING.md)
 
-If you'd like to contribute a new feature, be sure to create an issue offering to do so first.
+
+**If you'd like to contribute a new feature, be sure to create an issue offering to do so first.**
 This will likely save much back and forth when compared to surprise PRs!
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on code
@@ -78,7 +82,7 @@ This project uses [Semantic Versioning](http://semver.org/) for versioning. For 
 available, see the [tags on this
 repository](https://github.com/G5JDA/SOTAtoADIF/tags).
 
-## Authors
+## Author
 
   - **[Jack G5JDA](https://g5jda.uk)** -
     [GitHub Profile](https://github.com/G5JDA)

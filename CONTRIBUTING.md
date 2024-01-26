@@ -141,7 +141,10 @@ Otherwise, any contributions are gladly accepted - hopefully without too much ni
 
 Essential:
 - Develop for no older than Python 3.10, preferably 3.11 or 3.12.
-- Do not require non-standard imports (yes, even if the package can be installed with pip!)
+- Avoid non-standard imports unless you have an undeniable reason:
+  - Yes, even if the package can be installed with pip!
+  - This is to save ourselves from future dependency chaos.
+  - `urllib3` is the only exception so far due to the massive time saving it produces.
 
 ### Improving The Documentation
 For now the only docs are the README.
@@ -162,7 +165,6 @@ All Python code should follow the general intent of PEP8.
 
 Develop for no older than Python 3.10, preferably 3.11 or 3.12.
 
-Do not require non-standard imports (yes, even if the package can be installed with pip!)
 
 <!-- omit in toc -->
 ## Attribution
