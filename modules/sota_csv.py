@@ -138,10 +138,18 @@ def enrich_qsos(qsos_dict):
                             checked_summits_data[summit_ref] = summit_data  # cache the summit data
                             api_count += 1
 
-                        locator_key = summit_type_key + '_locator'  # either 'summit_locator' or 'other_summit_locator'
-                        summit_locator = checked_summits_data[summit_ref]['locator']  # get summit locator from cache
+                        # make sure the summit data is not empty (e.g. after API call failures)
+                        summit_data = checked_summits_data[summit_ref]
+                        if summit_data:
+                            # get summit locator from cache
+                            summit_locator = checked_summits_data[summit_ref].get('locator', '')
 
-                        qso[locator_key] = summit_locator  # we can get away with this since dicts are objects in py
+                            # make sure summit locator is not empty
+                            if summit_locator:
+                                # either 'summit_locator' or 'other_summit_locator'
+                                locator_key = summit_type_key + '_locator'
+                                # we can get away with this since dicts are objects in python
+                                qso[locator_key] = summit_locator
 
     # TODO quiet mode (is there some proper way to do info prints??)
     print("Number of unique summits found: " + str(len(checked_summits_data.keys())))
