@@ -45,10 +45,6 @@ Designed to work with only default python packages to prevent future dependency 
   Not an issue for LoTW as long as the station location has blank locator field (docs suggest this is possible, and how 
   LoTW copes with airborne contacts). I guess the user could use their home QTH if they are sure all contacts are from 
   there. Not much gain over ON6ZQ, but I guess worth adding for completeness in version > 1.
-- [ ] Should we allow non-default included modules just so we can use urllib3?
-  - This may significantly speed up the API lookups as built-in urllib 
-  reestablishes a connection for each request (including DNS lookup!!!)
-  SOTA API is https only so overhead is quite high.
 - [ ] We could use pyinstaller to create a less complicated way to use this program for users not familiar with python
 
 ## Getting Started / How to Use

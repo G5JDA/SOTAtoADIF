@@ -21,7 +21,6 @@ Contains all functionality related to the SOTA API.
 e.g. finding summit data from reference
 """
 
-import urllib.error  # TODO remove this once try except updated below
 import urllib3
 import warnings
 from SOTAtoADIF import __version__
@@ -57,33 +56,25 @@ def summit_data_from_ref(summit_ref):
                               + "was not found or is bad. Summit ref: " + summit_ref +
                               ". No enrichment for this summit!")
 
-            case _:
-                # some other error with the lookup, unknown
-                warnings.warn("\nSOTA API returned status code: " + str(status_code) + ". Unknown error. Summit ref: "
-                              + summit_ref + ". No enrichment for this summit!")
-
-    # catch HTTP errors
-    # TODO update these to urllib3 exceptions
-    except urllib.error.HTTPError as e:
-        match e.code:
             case 404:
                 # most likely the summit ref is malformed or the API path changed
-                warnings.warn("\nSOTA API returned status code: " + str(e.code) +
+                warnings.warn("\nSOTA API returned status code: " + str(status_code) +
                               ". Either summit ref is malformed or API has changed. Summit ref: " + summit_ref +
                               ". No enrichment for this summit!")
 
             case code if code in range(500, 599):
                 # some sort of server error
-                warnings.warn("\nSOTA API returned status code: " + str(e.code) + ". SOTA API may have changed " +
+                warnings.warn("\nSOTA API returned status code: " + str(status_code) + ". SOTA API may have changed " +
                               "or is down. Summit ref: " + summit_ref + ". No enrichment for this summit!")
 
             case _:
                 # some other error with the lookup, unknown
-                warnings.warn("\nSOTA API returned status code: " + str(e.code) + ". Unknown error. Summit ref: "
+                warnings.warn("\nSOTA API returned status code: " + str(status_code) + ". Unknown error. Summit ref: "
                               + summit_ref + ". No enrichment for this summit!")
 
-    # if something went really wrong!
-    except (urllib.error.URLError, urllib.error.ContentTooShortError) as e:
+    # catch urllib3 errors, unfortunately not well documented what's likely to raise the many available
+    # we can do better if we get reports of exceptions in the wild
+    except Exception as e:
         warnings.warn("\nSOTA API Unknown error. Summit ref: " + summit_ref + ". No enrichment for this summit!\n"
                       + "Error info: " + str(e))
 
