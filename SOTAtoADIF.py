@@ -26,6 +26,10 @@ See README.md or https://github.com/G5JDA/SOTAtoADIF or https://g5jda.uk
 
 Please check CONTRIBUTING.md if you'd like to improve / add to what this program can do.
 """
+
+__version__ = '0.1.0'
+__author__ = 'Jack G5JDA'
+
 import time
 import argparse
 
@@ -33,6 +37,8 @@ from modules import sota_csv
 
 
 if __name__ == '__main__':
+    time_start = time.time()  # to measure time taken
+
     parser = argparse.ArgumentParser(
         prog='SOTAtoADIF',
         description='Convert SOTA CSV log files to ADIF.',
@@ -53,22 +59,14 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    file = args.log_path
+    if args.quiet or args.chaser or args.s2s:
+        print('options -q -c -s not yet implemented')
+        exit(1)
 
-    t = time.time()
+    file = args.log_path
     log = sota_csv.read_log(file)
-    t1 = time.time() - t
-    t = time.time()
     qsos_r = sota_csv.process_qsos(log)
-    t2 = time.time() - t
-    t = time.time()
     qsos = sota_csv.enrich_qsos(qsos_r)
-    t3 = time.time() - t
-    t = time.time()
-    print(qsos.keys())
-    print('\n\n')
-    print(qsos)
-    print('\n\n')
-    print(t1)
-    print(t2)
-    print(t3)
+
+    duration = round(time.time() - time_start, 2)
+    print('Completed in {} seconds.'.format(duration))  # TODO quiet mode

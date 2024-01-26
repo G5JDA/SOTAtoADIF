@@ -19,3 +19,6 @@ adif.py
 
 Handles production of ADIF format and has related helpers (e.g. MHz to ADIF band, mode/sub-mode enumeration)
 """
+
+from SOTAtoADIF import __version__
+# TODO use this to include version number in ADIF header
