@@ -9,21 +9,6 @@ The remaining caveat is your callsign must imply the DXCC entity you operated fr
 
 Designed for `Python >= 3.10, urllib3 >= 2`.
 
-## Pseudocode
-- [x] Read activator CSV
-  - [x] For each line, add QSO to dict (first key is station callsign)
-- [ ] S2S enrichment would happen here
-- [x] For each QSO in dict
-  - [x] look up sota-ref to get locator (keep record of looked up refs in this run to reduce API queries)
-- [ ] For each station callsign in dict
-  - [ ] Generate ADIF header string, append to ADIF string
-  - [ ] For each QSO in array
-    - [ ] Generate QSO ADIF string, append to ADIF string
-    - [ ] convert MHz to band
-    - [ ] convert mode to adif mode (and sub-mode if relevant)
-  - [ ] Generate ADIF footer (if such a thing), append to ADIF string
-  - [ ] Write ADIF file for station callsign
-
 ## TODO
 - [ ] Squash all commits and force push to main
 - [ ] Write basic how to use docs into README
@@ -34,19 +19,28 @@ Designed for `Python >= 3.10, urllib3 >= 2`.
   - [ ] maybe also make CLI prompt to agree to this caveat
   - [ ] technically possible to set DXCC to NONE also but then no point uploading to LoTW surely?
 - [ ] venv creation script + pip install requirements.txt (python>=3.10, urllib3>=2)
+
 ## Ideas / Thoughts
 
-- [ ] Optional import of S2S CSV, then do some kind of join if all other fields of QSO match, add DX SOTA ref
-  - This has no utility for LoTW so do not include in version 1
-  - Big utility for getting most info from csv into adif - e.g. to import to logging program
-- [ ] Chaser CSV could also be added (not for S2S but will include them without my SOTA ref - a join with S2S could exclude them)
-  - Would be better than nothing for adding to logging programs / LoTW for DXCC, but it will be impossible to guess the locator.
-  Not an issue for LoTW as long as the station location has blank locator field (docs suggest this is possible, and how 
-  LoTW copes with airborne contacts). I guess the user could use their home QTH if they are sure all contacts are from 
-  there. Not much gain over ON6ZQ, but I guess worth adding for completeness in version > 1.
-- [ ] We could use pyinstaller to create a less complicated way to use this program for users not familiar with python
-  - maybe this is the best option for Windows?
-  - not needed for linux, latest (LTS) releases of major distros are already at least python3.10
+- `Target = v1.0`
+  - We could use `pyinstaller` to create a less complicated way to use this program for users not familiar with Python.
+    - Maybe this is the best option for Windows?
+    - Not needed for linux, latest (LTS) releases of major distros are already at least Python 3.10
+    - Mac users can adapt the linux instructions
+- `Target >= v1.1`
+  - `--quiet (-q)` option.
+  - `--ignore-before (-i) [date]` option.
+    - Allow users to input full log csv but ignore records before specified date.
+    - Otherwise, full log processing and single activation processing are easy, anything inbetween is clumsy.
+- `Target >= v2.0`
+  - Optional import of S2S CSV, then do some kind of join if all other fields of QSO match, add DX SOTA ref.
+    - This has no utility for LoTW so do not include in version 1.
+    - Big utility for getting most info from csv into adif - e.g. to import to logging program.
+  - Chaser CSV could also be added (not for S2S but will include them without my SOTA ref - a join with S2S could exclude them).
+    - Would be better than nothing for adding to logging programs / LoTW for DXCC, but it will be impossible to guess the locator.
+    Not an issue for LoTW as long as the station location has blank locator field (docs suggest this is possible, and how 
+    LoTW copes with airborne contacts). I guess the user could use their home QTH if they are sure all contacts are from 
+    there. Not much gain over ON6ZQ, but I guess worth adding for completeness in version > 1.
 
 ## Getting Started / How to Use
 
@@ -77,6 +71,20 @@ This will likely save much back and forth when compared to surprise PRs!
 
 Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on code
 of conduct, and the process for submitting pull requests.
+
+### Installing for Development
+
+#### Linux
+1. Fork and clone this repository to your development machine.
+2. Follow the `venv` setup instructions for normal users (there are no special requirements for development).
+
+#### Windows
+1. Install Python 3.10, pip, and Git (or an IDE that provides these).
+2. Fork and clone this repository to your development machine.
+3. Set up the `venv` for Python (from repo directory in PowerShell or IDE terminal).
+   1. `python -m venv .\venv\`
+   2. `pip install -r requirements.txt`
+4. In future, activate the `venv` in PowerShell with `<repo_path>\venv\Scripts\Activate.ps1`
 
 ## Versioning
 
