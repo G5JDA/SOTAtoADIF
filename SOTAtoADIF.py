@@ -34,6 +34,7 @@ import time
 import argparse
 from modules import sota_csv
 from modules import sota_api
+from modules import adif
 
 
 if __name__ == '__main__':
@@ -48,7 +49,7 @@ if __name__ == '__main__':
                         help='path to SOTA CSV log file (activator/chaser log)')
 
     parser.add_argument('-q', '--quiet', action='store_true',
-                        help='suppress informational console output')
+                        help='suppress informational console output (warnings remain)')
 
     parser.add_argument('-c', '--chaser', action='store_true',
                         help='process as a chaser log (changes behaviour of -s)')
