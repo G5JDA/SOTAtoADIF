@@ -17,7 +17,7 @@ If not, see <https://www.gnu.org/licenses/>.
 
 adif.py
 
-Handles production of ADIF format and has related helpers (e.g. MHz to ADIF band, mode/sub-mode enumeration)
+Handles production of ADIF format including output of files
 """
 
 import warnings
