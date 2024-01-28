@@ -38,10 +38,10 @@ def frequency_to_band(frequency):
         if frequency.endswith('M'):
             # this is the only case observed so far in wild SOTA CSVs
             frequency = frequency.removesuffix('M')  # at this point we should be left with the numeric part only
-            frequency = float(frequency)  # the one time weak typing is helpful
+            float_frequency = float(frequency)
 
             # let's support every band in the ADIF spec! (2190m SOTA someone?)
-            match frequency:
+            match float_frequency:
                 case freq if (0.1357 <= freq <= 0.1378):
                     band = '2190m'
                 case freq if (0.472 <= freq <= 0.479):
@@ -110,12 +110,12 @@ def frequency_to_band(frequency):
                     band = 'submm'
                 case _:
                     message = '\nFrequency MHz value not in ADIF specification. Please report this in a Github issue: '
-                    message += frequency
+                    message += str(frequency)
                     warnings.warn(message)
 
         else:
             message = '\nFrequency string uses an SI prefix other than Mega. Please report this in a Github issue: '
-            message += frequency
+            message += str(frequency)
             warnings.warn(message)
 
     else:
