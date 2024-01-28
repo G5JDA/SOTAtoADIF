@@ -52,18 +52,30 @@ def frequency_to_band(frequency):
                     band = '160m'
                 case freq if (3.5 <= freq <= 4.0):
                     band = '80m'
+                case freq if (5.0 <= freq < 5.06):
+                    # this is outside the ADIF spec but predicted to be an issue based on SOTA CSV
+                    band = '60m'
                 case freq if (5.06 <= freq <= 5.45):
                     band = '60m'
                 case freq if (7.0 <= freq <= 7.3):
                     band = '40m'
+                case freq if (10.0 <= freq < 10.1):
+                    # this is outside the ADIF spec but predicted to be an issue based on SOTA CSV
+                    band = '30m'
                 case freq if (10.1 <= freq <= 10.15):
                     band = '30m'
                 case freq if (14.0 <= freq <= 14.35):
                     band = '20m'
+                case freq if (18.0 <= freq < 18.068):
+                    # this is outside the ADIF spec but predicted to be an issue based on SOTA CSV
+                    band = '17m'
                 case freq if (18.068 <= freq <= 18.168):
                     band = '17m'
                 case freq if (21.0 <= freq <= 21.45):
                     band = '15m'
+                case freq if (24.0 <= freq < 24.89):
+                    # this is outside the ADIF spec but predicted to be an issue based on SOTA CSV
+                    band = '12m'
                 case freq if (24.89 <= freq <= 24.99):
                     band = '12m'
                 case freq if (28.0 <= freq <= 29.7):
