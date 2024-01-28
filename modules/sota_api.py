@@ -99,7 +99,7 @@ def enrich_qsos(qsos_dict):
                 # loop to reuse same code for 'summit' and 'other_summit' lookups
                 for key in ['summit', 'other_summit']:
                     summit_type_key = key  # the key of qso dict ('summit' or 'other_summit')
-                    summit_ref = qso[summit_type_key]  # local var for summit ref to improve readability
+                    summit_ref = qso[summit_type_key]  # the local var for summit ref to improve readability
 
                     # check summit_ref is not blank string
                     if summit_ref:
@@ -109,10 +109,10 @@ def enrich_qsos(qsos_dict):
                             checked_summits_data[summit_ref] = summit_data  # cache the summit data
                             api_count += 1
 
-                        # make sure the summit data is not empty (e.g. after API call failures)
+                        # Make sure the summit data is not empty (e.g. after API call failures)
                         summit_data = checked_summits_data[summit_ref]
                         if summit_data:
-                            # get summit locator from cache (default to empty string if locator key missing)
+                            # get summit locator from the cache (default to empty string if locator key missing)
                             summit_locator = checked_summits_data[summit_ref].get('locator', '')
 
                             # make sure summit locator is not empty
