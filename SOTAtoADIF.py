@@ -69,6 +69,7 @@ if __name__ == '__main__':
     main_log_rows = sota_csv.read_log(main_log_path)  # read CSV rows into list
     main_log_dict = sota_csv.process_qsos(main_log_rows)  # process rows into QSO dict
     main_log_dict = sota_api.enrich_qsos(main_log_dict)  # enrich QSOs with API data
+    adif.output_logs(main_log_dict)  # convert to ADIF and output files
 
     duration = round(time.time() - time_start, 2)
     print('Completed in {} seconds.'.format(duration))  # TODO quiet mode
