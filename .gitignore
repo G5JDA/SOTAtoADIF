@@ -163,3 +163,5 @@ cython_debug/
 *.csv
 *.adi
 *.adif
+*.tq8
+*.tq8.gz
