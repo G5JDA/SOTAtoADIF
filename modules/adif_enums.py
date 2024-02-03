@@ -83,6 +83,25 @@ _modes_dict = {
 }
 
 
+def bodge_modes(mode_string):
+    """
+    Function to fudge known bad modes into the assumed valid ADIF mode
+    :param mode_string: non-ADIF mode to fudge
+    :return: e.g. {'mode': 'SSB', 'sub-mode': 'LSB'} or None if bodge fails
+    """
+    bodged = None
+    mode_string = mode_string
+    sub_mode_string = None
+
+    # this can be improved when we have more examples of needed bodges
+    match mode_string:
+        case 'DV':
+            mode_string = 'DIGITALVOICE'
+            bodged = {'mode': mode_string, 'sub_mode': sub_mode_string}
+
+    return bodged
+
+
 def enum_mode(mode_string):
     """
     Enumerate the mode to ADIF spec
@@ -107,10 +126,20 @@ def enum_mode(mode_string):
 
         if not sub_mode_string:
             # we have iterated over all sub-modes and still not found a match!
-            message = '\nMode not a valid ADIF mode, program importing ADIF will probably complain.'
-            message += ' Please report this in a Github issue: '
-            message += mode_string
-            warnings.warn(message)
+
+            # attempt a bodge
+            bodged_mode = bodge_modes(mode_string)
+
+            if bodged_mode:
+                mode_string = bodged_mode['mode']
+                sub_mode_string = bodged_mode['sub_mode']
+
+            # bodge failed, warn
+            else:
+                message = '\nMode not a valid ADIF mode, program importing ADIF will probably complain.'
+                message += ' Please report this in a Github issue: '
+                message += mode_string
+                warnings.warn(message)
 
     return {'mode': mode_string, 'sub_mode': sub_mode_string}
 
