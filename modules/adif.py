@@ -73,6 +73,10 @@ def write_adi(adi_string, callsign, now):
     """
     timestamp = now.strftime("%Y-%m-%d_%H-%M-%S")
     filename = "{}_SOTAtoADIF_{}.adi".format(callsign, timestamp)
+    filename = filename.replace('/', '-')
+
+    print("Writing ADIF to: {}".format(filename))  # TODO quiet mode
+
     with open(filename, 'x') as f:
         f.write(adi_string)
 
