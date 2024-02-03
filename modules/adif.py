@@ -66,8 +66,8 @@ def generate_qsos(callsign, qso_list):
 
 def write_adi(adi_string, callsign, now):
     """
-    Write the ADI string to file
-    :param adi_string: ADI formatted string, content for output to file
+    Write the ADIF string to file
+    :param adi_string: ADIF formatted string, content for output to file
     :param callsign: Callsign for filename generation
     :param now: Datetime for filename generation
     """
@@ -87,7 +87,7 @@ def output_logs(log_dict):
     :param log_dict: dict in format output by sota_csv.process_qsos()
     :return: Number of files written
     """
-    now = datetime.now(timezone.utc).replace(microsecond=0)  # UTC time now - microseconds are unnecessary
+    now = datetime.now(timezone.utc).replace(microsecond=0)  # UTC time now (microseconds are unnecessary)
     written_count = 0
 
     # only operate on non-empty input
@@ -96,13 +96,15 @@ def output_logs(log_dict):
         for callsign in log_dict.keys():
             # only output a file for this callsign if there are QSOs present
             if log_dict[callsign]:
-                adi_string = generate_header(callsign, now)  # prepare adi string with ADIF header
-                adi_string += generate_qsos(callsign, log_dict[callsign])  # add the QSO records
-                write_adi(adi_string, callsign, now)  # write the .adi
+                adif_string = generate_header(callsign, now)  # prepare ADIF string with ADIF header
+                adif_string += generate_qsos(callsign, log_dict[callsign])  # add the QSO records
+                write_adi(adif_string, callsign, now)  # write the .adi
                 written_count += 1
             else:
                 message = "\nNot outputting file for {} since no QSOs present in processed dict.".format(callsign)
                 message += " No QSOs were successfully prepared for output for this callsign."
                 warnings.warn(message)
+
+    print("Wrote {} ADIF log files.".format(written_count))  # TODO quiet mode
 
     return written_count

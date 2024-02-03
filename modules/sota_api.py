@@ -123,7 +123,7 @@ def enrich_qsos(qsos_dict):
                                 qso[locator_key] = summit_locator
 
     # TODO quiet mode
-    print("Number of unique summits found: " + str(len(checked_summits_data.keys())))
-    print("Number of API calls: " + str(api_count))  # should equal number of unique summits
+    print("Number of unique summits found: {}.".format(str(len(checked_summits_data.keys()))))
+    print("Number of API calls: {}.".format(str(api_count)))  # should equal number of unique summits
 
     return qsos_dict
