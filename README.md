@@ -1,4 +1,4 @@
-# SOTAtoADIF v0.1.0
+# SOTAtoADIF v1.0.0-alpha1
 
 Convert SOTA database CSV logs to ADIF. Including enrichment from SOTA API summit data.
 

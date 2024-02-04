@@ -27,7 +27,7 @@ See README.md or https://github.com/G5JDA/SOTAtoADIF or https://g5jda.uk
 Please check CONTRIBUTING.md if you'd like to improve / add to what this program can do.
 """
 
-__version__ = '0.1.0'
+__version__ = '1.0.0-alpha1'
 __author__ = 'Jack G5JDA'
 
 import time
