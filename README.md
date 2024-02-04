@@ -3,17 +3,15 @@
 Convert SOTA database CSV logs to ADIF. Including enrichment from SOTA API summit data.
 
 Specifically intended to produce ADIF files that can be easily uploaded to LoTW using TQSL.
-Contrary to what many people seem to believe, you do not need a station location in TQSL for every single summit!
+Contrary to what many people seem to believe, **you do not need a station location in TQSL for every single summit!**
 As long as you have not changed the default TQSL settings, the locator from the ADIF QSO will be used.
 The remaining caveat is your callsign must imply the DXCC entity you operated from.
 
 Designed for `Python >= 3.10, urllib3 >= 2`.
 
-## TODO
-- [ ] Squash all commits and force push to main
+## TODO for v1.0.0 release
 - [ ] Write basic how to use docs into README
-- [ ] Add proper error handling so user feedback is useful
-- [ ] Create Wiki on GitHub for more detailed docs
+- [ ] Create Wiki on GitHub for more detailed docs - e.g. how to use with TQSL
 - [ ] Make big disclaimer / notice that callsign must = single DXCC 
 (and CQ/ITU zones but these can be set to NONE if not) otherwise not acceptable for LoTW upload.
   - [ ] maybe also make CLI prompt to agree to this caveat
@@ -22,17 +20,19 @@ Designed for `Python >= 3.10, urllib3 >= 2`.
 
 ## Ideas / Thoughts
 
-- `Target = v1.0`
+- `Target = v1.0.0`
   - We could use `pyinstaller` to create a less complicated way to use this program for users not familiar with Python.
     - Maybe this is the best option for Windows?
-    - Not needed for linux, latest (LTS) releases of major distros are already at least Python 3.10
-    - Mac users can adapt the linux instructions
-- `Target >= v1.1`
+    - Not needed for linux, latest (LTS) releases of major distros are already at least Python 3.10.
+    - Mac users can adapt the linux instructions.
+- `Target >= v1.1.0`
   - `--quiet (-q)` option.
+    - Perhaps also better warning / infomational prints in general.
   - `--ignore-before (-i) [date]` option.
     - Allow users to input full log csv but ignore records before specified date.
     - Otherwise, full log processing and single activation processing are easy, anything inbetween is clumsy.
-- `Target >= v2.0`
+    - Not so useful for LoTW - TQSL already allows date range selection during import.
+- `Target >= v2.0.0`
   - Optional import of S2S CSV, then do some kind of join if all other fields of QSO match, add DX SOTA ref.
     - This has no utility for LoTW so do not include in version 1.
     - Big utility for getting most info from csv into adif - e.g. to import to logging program.
@@ -49,11 +49,16 @@ Todo
 ### Prerequisites
 
 - An internet connection (both for initial download and use - calls are made to the SOTA API)
-- A Python installation on your computer (version 3.10 or greater required, 3.12 used for development)
+- `Python >= 3.10.0` - use a venv
+- `urllib3 >= 2.0.0` - can be installed with pip
 
 ### Installing
 
 Todo
+
+### Use
+
+`python3 SOTAtoADIF.py <SOTA Database CSV filepath>`
 
 ## Contributing
 
@@ -75,12 +80,12 @@ of conduct, and the process for submitting pull requests.
 ### Installing for Development
 
 #### Linux
-1. Fork and clone this repository to your development machine.
+1. Fork and git clone this repository to your development machine (do not just download the source zip!!).
 2. Follow the `venv` setup instructions for normal users (there are no special requirements for development).
 
 #### Windows
 1. Install Python 3.10, pip, and Git (or an IDE that provides these).
-2. Fork and clone this repository to your development machine.
+2. Fork and git clone this repository to your development machine (do not just download the source zip!!).
 3. Set up the `venv` for Python (from repo directory in PowerShell or IDE terminal).
    1. `python -m venv .\venv\`
    2. `pip install -r requirements.txt`
