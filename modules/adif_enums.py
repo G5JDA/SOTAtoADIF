@@ -20,7 +20,7 @@ adif_enums.py
 Handles conversion of data to ADIF specified enums which are in effect strings
 """
 
-import warnings
+import logging
 
 # dictionary to hold the chaos that is ADIF mode enumeration
 _modes_dict = {
@@ -126,6 +126,7 @@ def enum_mode(mode_string):
 
         if not sub_mode_string:
             # we have iterated over all sub-modes and still not found a match!
+            logging.debug('Did not match mode to ADIF mode or sub mode, attempting bodge for {}'.format(mode_string))
 
             # attempt a bodge
             bodged_mode = bodge_modes(mode_string)
@@ -133,13 +134,16 @@ def enum_mode(mode_string):
             if bodged_mode:
                 mode_string = bodged_mode['mode']
                 sub_mode_string = bodged_mode['sub_mode']
+                logging.debug('Successfully bodged mode {}'.format(mode_string))
+                logging.debug('Successfully bodged sub mode {}'.format(sub_mode_string))
 
             # bodge failed, warn
             else:
+                logging.debug('Failed to bodge mode.')
                 message = '\nMode not a valid ADIF mode, program importing ADIF will probably complain.'
                 message += ' Please report this in a Github issue: '
                 message += mode_string
-                warnings.warn(message)
+                logging.warning(message)
 
     return {'mode': mode_string, 'sub_mode': sub_mode_string}
 
@@ -244,15 +248,15 @@ def frequency_to_band(frequency):
                 case _:
                     message = '\nFrequency MHz value not in ADIF specification. Please report this in a Github issue: '
                     message += str(frequency)
-                    warnings.warn(message)
+                    logging.warning(message)
 
         else:
             message = '\nFrequency string uses an SI prefix other than Mega. Please report this in a Github issue: '
             message += str(frequency)
-            warnings.warn(message)
+            logging.warning(message)
 
     else:
         message = '\nFrequency string does not end with Hz. Please report this in a Github issue: ' + str(frequency)
-        warnings.warn(message)
+        logging.warning(message)
 
     return band
