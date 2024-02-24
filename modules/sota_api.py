@@ -22,7 +22,7 @@ e.g. finding summit data from reference
 """
 
 import urllib3
-import warnings
+import logging
 from SOTAtoADIF import __version__
 
 # things we need for API calls
@@ -40,10 +40,14 @@ def summit_data_from_ref(summit_ref):
     # return variable - if we don't successfully get the summit data, we return None
     summit_data = None
 
+    logging.debug("Retrieving summit data for {}".format(summit_ref))
+
     try:
         api_url = api_url_base + "summits/" + summit_ref
+        logging.debug("Using API URL: {}".format(api_url))
         response = urllib3.request("GET", api_url, retries=3, headers=header)  # using urllib3 global PoolManager
         status_code = response.status
+        logging.debug("API returned status code: {}".format(status_code))
 
         match status_code:
             case 200:
@@ -52,31 +56,31 @@ def summit_data_from_ref(summit_ref):
 
             case 204:
                 # most likely the summit ref was not found / is invalid
-                warnings.warn("\nSOTA API returned status code: " + str(status_code) + ". This means summit reference "
-                              + "was not found or is bad. Summit ref: " + summit_ref +
-                              ". No enrichment for this summit!")
+                logging.warning("SOTA API returned status code: " + str(status_code) + ". This means summit reference"
+                                + " was not found or is bad. Summit ref: " + summit_ref +
+                                ". No enrichment for this summit!")
 
             case 404:
                 # most likely the summit ref is malformed or the API path changed
-                warnings.warn("\nSOTA API returned status code: " + str(status_code) +
-                              ". Either summit ref is malformed or API has changed. Summit ref: " + summit_ref +
-                              ". No enrichment for this summit!")
+                logging.warning("SOTA API returned status code: " + str(status_code) +
+                                ". Either summit ref is malformed or API has changed. Summit ref: " + summit_ref +
+                                ". No enrichment for this summit!")
 
             case code if code in range(500, 599):
                 # some sort of server error
-                warnings.warn("\nSOTA API returned status code: " + str(status_code) + ". SOTA API may have changed " +
-                              "or is down. Summit ref: " + summit_ref + ". No enrichment for this summit!")
+                logging.warning("SOTA API returned status code: " + str(status_code) + ". SOTA API may have changed "
+                                + "or is down. Summit ref: " + summit_ref + ". No enrichment for this summit!")
 
             case _:
                 # some other error with the lookup, unknown
-                warnings.warn("\nSOTA API returned status code: " + str(status_code) + ". Unknown error. Summit ref: "
-                              + summit_ref + ". No enrichment for this summit!")
+                logging.warning("SOTA API returned status code: " + str(status_code) + ". Unknown error. Summit ref: "
+                                + summit_ref + ". No enrichment for this summit!")
 
     # catch urllib3 errors, unfortunately not well documented what's likely to raise the many available
     # we can do better if we get reports of exceptions in the wild
     except Exception as e:
-        warnings.warn("\nSOTA API Unknown error. Summit ref: " + summit_ref + ". No enrichment for this summit!\n"
-                      + "Error info: " + str(e))
+        logging.warning("SOTA API Unknown error. Summit ref: " + summit_ref + ". No enrichment for this summit!")
+        logging.debug("Error info: " + str(e))
 
     return summit_data
 
@@ -91,8 +95,16 @@ def enrich_qsos(qsos_dict):
     checked_summits_data = {}  # caches all summit data from API (so that each summit ref only requires one API call)
     api_count = 0  # to confirm number of API calls made
 
+    logging.info('Enriching QSOs with API data (may take a moment).')
+
     # check input dict is not empty
-    if qsos_dict:
+    if not qsos_dict:
+        logging.debug('qsos_dict is empty')
+        logging.error('No QSOs exist to be enriched')
+    else:
+        logging.debug('API URL base {}'.format(api_url_base))
+        logging.debug('User-Agent is {}'.format(user_agent))
+
         # nested for loops to iterate over every qso
         for callsign in qsos_dict.keys():
             for qso in qsos_dict[callsign]:
@@ -105,25 +117,29 @@ def enrich_qsos(qsos_dict):
                     if summit_ref:
                         # only make the API call if we do not have a cached copy of the data
                         if summit_ref not in checked_summits_data.keys():
+                            logging.debug('Found new summit ref: {}'.format(summit_ref))
                             summit_data = summit_data_from_ref(summit_ref)
                             checked_summits_data[summit_ref] = summit_data  # cache the summit data
                             api_count += 1
 
                         # Make sure the summit data is not empty (e.g. after API call failures)
                         summit_data = checked_summits_data[summit_ref]
-                        if summit_data:
+                        if not summit_data:
+                            logging.debug('summit_data is empty, skipping enrichment')
+                        else:
                             # get summit locator from the cache (default to empty string if locator key missing)
                             summit_locator = checked_summits_data[summit_ref].get('locator', '')
 
                             # make sure summit locator is not empty
-                            if summit_locator:
+                            if not summit_locator:
+                                logging.debug('summit_locator is empty, skipping enrichment')
+                            else:
                                 # either 'summit_locator' or 'other_summit_locator'
                                 locator_key = summit_type_key + '_locator'
                                 # we can get away with this since dicts are objects in python
                                 qso[locator_key] = summit_locator
 
-    # TODO quiet mode
-    print("Number of unique summits found: {}.".format(str(len(checked_summits_data.keys()))))
-    print("Number of API calls: {}.".format(str(api_count)))  # should equal number of unique summits
+    logging.info("Number of unique summits found: {}.".format(str(len(checked_summits_data.keys()))))
+    logging.debug("Number of API calls: {}.".format(str(api_count)))  # should equal number of unique summits
 
     return qsos_dict

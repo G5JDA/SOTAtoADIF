@@ -20,7 +20,7 @@ adif.py
 Handles production of ADIF format including output of files
 """
 
-import warnings
+import logging
 from datetime import datetime, timezone
 from modules import adif_enums
 from SOTAtoADIF import __version__
@@ -33,6 +33,8 @@ def generate_header(callsign, now):
     :param callsign: station callsign as string
     :return: ADIF header as string (this includes a comment as the first two lines & newline at the end)
     """
+    logging.debug("Generating ADIF header for callsign {}".format(callsign))
+
     now_adif = now.strftime("%Y%m%d %H%M%S")  # convert to the weird ADIF timestamp format
     now_comment = now.strftime("%Y-%m-%d %H:%M:%S")
 
@@ -56,6 +58,8 @@ def generate_qsos(station_callsign, qso_list):
     :return: string containing QSOs in ADIF record format
     """
     qsos_adif = ''
+
+    logging.debug("Generating ADIF QSO records for callsign {}".format(station_callsign))
 
     for qso in qso_list:
         # conversions to ADIF enums / formats
@@ -84,7 +88,7 @@ def generate_qsos(station_callsign, qso_list):
         else:
             message = "\nNot outputting QSO since band lookup failed."
             message += " Callsign: {}. QSO: {}.".format(station_callsign, str(qso))
-            warnings.warn(message)
+            logging.warning(message)
             continue  # skip this QSO
 
         if qso.get('summit', None):
@@ -97,7 +101,7 @@ def generate_qsos(station_callsign, qso_list):
             # TODO skip this warning in chaser mode, we expect to have no grid
             message = "\nNot outputting QSO since my_gridsquare is missing and not using chaser mode."
             message += " Callsign: {}. QSO: {}.".format(station_callsign, str(qso))
-            warnings.warn(message)
+            logging.warning(message)
             continue  # skip this QSO
 
         if qso.get('other_summit', None):
@@ -137,7 +141,7 @@ def write_adi(adi_string, callsign, now):
     filename = "{}_SOTAtoADIF_{}.adi".format(callsign, timestamp)
     filename = filename.replace('/', '-')
 
-    print("Writing ADIF to: {}".format(filename))  # TODO quiet mode
+    logging.info("Writing ADIF to {}".format(filename))
 
     with open(filename, 'x') as f:
         f.write(adi_string)
@@ -152,10 +156,17 @@ def output_logs(log_dict):
     now = datetime.now(timezone.utc).replace(microsecond=0)  # UTC time now (microseconds are unnecessary)
     written_count = 0
 
+    logging.info("Preparing ADIF for output.")
+
     # only operate on non-empty input
-    if log_dict:
+    if not log_dict:
+        logging.debug("log_dict is empty")
+        logging.warning("There are no logs to output.")
+    else:
         # loop over station callsigns (this results in one file output per station callsign in log dict)
         for callsign in log_dict.keys():
+            logging.debug("Preparing ADIF for {}".format(callsign))
+
             # only output a file for this callsign if there are QSOs present
             if log_dict[callsign]:
                 adif_string = generate_header(callsign, now)  # prepare ADIF string with ADIF header
@@ -163,10 +174,11 @@ def output_logs(log_dict):
                 write_adi(adif_string, callsign, now)  # write the .adi
                 written_count += 1
             else:
+                logging.debug('log_dict[callsign] is empty')
                 message = "\nNot outputting file for {} since no QSOs present in processed dict.".format(callsign)
                 message += " No QSOs were successfully prepared for output for this callsign."
-                warnings.warn(message)
+                logging.warning(message)
 
-    print("Wrote {} ADIF log files.".format(written_count))  # TODO quiet mode
+    logging.info("Wrote {} ADIF log files.".format(written_count))
 
     return written_count

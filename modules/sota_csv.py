@@ -21,7 +21,7 @@ Contains functionality needed to make sense of SOTA CSV log files, process them 
 """
 
 import csv
-import warnings
+import logging
 
 
 def read_log(filepath):
@@ -35,6 +35,8 @@ def read_log(filepath):
     log = []
     row_count = 0
 
+    logging.info('Reading SOTA CSV log {}'.format(filepath))
+
     # no try-except here: if this doesn't 'just work' we have big problems so dying is probably best
     with open(filepath, newline='', encoding='utf-8') as f:
         reader = csv.reader(f)
@@ -42,7 +44,7 @@ def read_log(filepath):
             log.append(row)
             row_count += 1
 
-    print("Read {} rows from {}".format(row_count, filepath))  # TODO quiet mode
+    logging.info('Read {} rows from {}'.format(row_count, filepath))
 
     return log
 
@@ -56,8 +58,13 @@ def process_qsos(raw_log):
     """
     qsos_dict = {}
 
+    logging.info('Processing CSV rows into QSOs.')
+
     # don't try to process an empty log
-    if raw_log:
+    if not raw_log:
+        logging.debug('raw_log is empty')
+        logging.error('No record rows present after loading CSV')
+    else:
         for record in raw_log:
             match record[0]:
                 case 'V2':
@@ -79,31 +86,33 @@ def process_qsos(raw_log):
                             qsos_dict[record[1]].append(qso)
                         else:
                             # first qso for this callsign, init
+                            logging.debug('first QSO found for callsign {}'.format(record[1]))
                             qsos_dict[record[1]] = [qso]
 
                     except Exception as e:
-                        warnings.warn("\nUnknown error attempting to process log record as QSO. Record skipped: "
+                        logging.error("\nUnknown error attempting to process log record as QSO. Record skipped: "
                                       + record + "\nError info: " + str(e))
 
                     continue
 
                 case 'Version':
                     # skip header row present in S2S csv
+                    logging.debug('skipping S2S header row')
                     continue
 
                 case '':
                     # skip empty records
+                    logging.debug('skipping empty row')
                     continue
 
                 case _:
                     # default case means unexpected format
-                    warnings.warn("\nUnrecognized version field in CSV row. This could mean the SOTA CSV format has"
-                                  + "changed or the CSV file imported is not a SOTA CSV. Skipping row: " + record)
+                    logging.warning("\nUnrecognized version field in CSV row. This could mean the SOTA CSV format has"
+                                    + "changed or the CSV file imported is not a SOTA CSV. Skipping row: " + record)
                     continue
 
-    # TODO quiet mode
     if qsos_dict:
         for key in qsos_dict.keys():
-            print('Found {} QSOs with callsign {}.'.format(len(qsos_dict[key]), key))
+            logging.info('Found {} QSOs with callsign {}.'.format(len(qsos_dict[key]), key))
 
     return qsos_dict
