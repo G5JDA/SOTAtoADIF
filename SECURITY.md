@@ -2,12 +2,13 @@
 
 ## Supported Versions
 
-Only the latest tagged release is supported (not counting pre-release versions such as -alpha, -rc4, etc).
+Only the main branch and latest tagged release are supported (not including pre-release versions such as -alpha, -rc4, etc).
 
-| Version | Supported          |
-|---------|--------------------|
-| latest  | :white_check_mark: |
-| other   | :x:                |
+| Version                                                            | Supported            |
+|--------------------------------------------------------------------|----------------------|
+| main [branch](https://github.com/G5JDA/SOTAtoADIF/branches)        | :white_check_mark:   |
+| latest [release](https://github.com/G5JDA/SOTAtoADIF/releases) tag | :white_check_mark:   |
+| anything else                                                      | :x:                  |
 
 ## Reporting a Vulnerability
 
