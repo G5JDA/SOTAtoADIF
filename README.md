@@ -34,40 +34,6 @@ See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with SOTAtoADIF.
 If not, see <https://www.gnu.org/licenses/>.
 
-## TODO for v1.0.0 release
-- [ ] Add detail of how to use with TQSL to Wiki
-- [ ] Make big disclaimer / notice that callsign must = single DXCC 
-(and CQ/ITU zones but these can be set to NONE if not) otherwise not acceptable for LoTW upload.
-  - [ ] maybe also make CLI prompt to agree to this caveat
-  - [ ] technically possible to set DXCC to NONE also but then no point uploading to LoTW surely?
-- [ ] linux install script: venv creation script + pip install requirements.txt (python>=3.10, urllib3>=2)
-- [ ] linux update script: check for git changes on main, pull, rebuild venv etc
-- [ ] Bump version number
-- [ ] Pyinstaller exe for windows
-
-## Ideas / Thoughts
-
-- `Target >= v1.1.0`
-  - `--ignore-before (-i) [date]` option.
-    - Allow users to input full log csv but ignore records before specified date.
-    - Otherwise, full log processing and single activation processing are easy, anything inbetween is clumsy.
-    - Not so useful for LoTW - TQSL already allows date range selection during import.
-  - `--merge-suffixes (-m)` option.
-    - Optionally output an additional ADIF file for each base callsign (e.g. G5JDA) that strips callsign suffixes.
-    - E.g. all `/P` and `/M` QSOs but without the suffix.
-    - In this way, users have the option of additionally logging without a suffix
-    (and since we only merge suffixed QSOs we don't have dupe issues with the plain callsign ADIF file).
-    - This is needed because a lot of stations don't log suffixes properly ([LoTW quietly recommends this](https://lotw.arrl.org/lotw-help/submitting-qsos/)).
-- `Target >= v2.0.0`
-  - `--s2s` Optional import of S2S CSV, then do some kind of join if all other fields of QSO match, add DX SOTA ref.
-    - This has no utility for LoTW so do not include in version 1.
-    - Big utility for getting most info from csv into adif - e.g. to import to logging program.
-  - `-c` Chaser CSV could also be added (not for S2S but will include them without my SOTA ref - a join with S2S could exclude them).
-    - Would be better than nothing for adding to logging programs / LoTW for DXCC, but it will be impossible to guess the locator.
-    Not an issue for LoTW as long as the station location has blank locator field (docs suggest this is possible, and how 
-    LoTW copes with airborne contacts). I guess the user could use their home QTH if they are sure all contacts are from 
-    there. Not much gain over ON6ZQ, but I guess worth adding for completeness in version > 1.
-
 ## Getting Started / How to Use
 
 ### Windows
