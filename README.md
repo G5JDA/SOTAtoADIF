@@ -117,7 +117,7 @@ This is linux, we're not really installing a Python script 😉!
 
 However, these steps only need to be followed the first time.
 ```shell
-# clone the repository (no need to grab a specific tag, main branch will be the latest release)
+# clone the repository (no need to grab a specific tag, main branch is stable)
 git clone https://github.com/G5JDA/SOTAtoADIF.git
 
 #TODO venv creation script & run here
