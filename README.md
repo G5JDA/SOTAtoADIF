@@ -86,7 +86,11 @@ However, these steps only need to be followed the first time.
 # clone the repository (no need to grab a specific tag, main branch is stable)
 git clone https://github.com/G5JDA/SOTAtoADIF.git
 
-#TODO venv creation script & run here
+# enter repo directory
+cd SOTAtoADIF
+
+# run venv creation script (if this step fails, fix issues then instead follow update section below)
+source venv.sh
 ```
 
 #### Use
@@ -98,7 +102,7 @@ Do this each time you want to use SOTAtoADIF.
 cd /<path_to>/SOTAtoADIF
 
 # activate the virtual environment
-source .venv/bin/activate
+source venv.sh
 
 # run SOTAtoADIF
 python3 SOTAtoADIF.py <SOTA Database CSV filepath>
@@ -115,15 +119,16 @@ If it has been a while since you last used SOTAtoADIF, there may be a newer vers
 # make sure you are in the SOTAtoADIF directory
 cd /<path_to>/SOTAtoADIF
 
-# get latest changes
-#TODO run update script (determines if there are new changes on main, if so pull & rebuild venv)
+# get latest changes from main branch
+source update.sh
 ```
 
 
 ### Mac
 If you have a Mac, please feel free to contribute a basic how to use guide.
 
-The steps should be somewhat similar to Linux except you might not already have Python `>=3.10`.
+The steps should be somewhat similar to Linux except you might not already have Python `>=3.10`
+and the Bash scripts might not work.
 
 ## Contributing
 
