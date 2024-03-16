@@ -157,9 +157,12 @@ of conduct, and the process for submitting pull requests.
 1. Install Python `>=3.10`, pip, and Git (or an IDE that provides these).
 2. Fork and git clone this repository to your development machine (do not just download the source zip!!).
 3. Set up the `venv` for Python (from repo directory in PowerShell or IDE terminal).
-   1. `python -m venv .\venv\`
-   2. `pip install -r requirements.txt`
-4. In future, activate the `venv` in PowerShell with `<repo_path>\venv\Scripts\Activate.ps1`
+   1. `python -m venv .\.venv\`
+   2. `.\.venv\Scripts\Activate.ps1`
+      1. If this fails with `running scripts is disabled on this system`, run PowerShell 
+      as an administrator and execute `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned`
+   3. `pip install -r requirements.txt`
+4. In future, activate the `venv` in PowerShell with `<repo_path>\.venv\Scripts\Activate.ps1`
 
 ## Versioning
 
