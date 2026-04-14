@@ -105,7 +105,7 @@ def generate_qsos(station_callsign, qso_list):
             continue  # skip this QSO
 
         if qso.get('other_summit', None):
-            qso_adif += "<MY_SOTA_REF:{}>{}".format(len(qso['other_summit']), qso['other_summit'])
+            qso_adif += "<SOTA_REF:{}>{}".format(len(qso['other_summit']), qso['other_summit'])
 
         if qso.get('other_summit_locator', None):
             # TODO this is wrong in chaser mode, should become my_gridsquare
