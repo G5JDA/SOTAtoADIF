@@ -1,3 +1,7 @@
+# Archived October 2026
+I have decided to archive this project since SOTA now prefer you to use the summit CSV file and not the API.
+Whilst this project could be reworked on that basis, I have instead focused on the [browser version](https://github.com/G5JDA/SOTAtoADIF-Web).
+
 # SOTAtoADIF v1.0.0
 
 Convert SOTA database CSV logs to ADIF. Including enrichment from SOTA API summit data.
